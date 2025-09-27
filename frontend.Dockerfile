@@ -6,6 +6,9 @@ WORKDIR /app
 # Копируем исходный код
 COPY frontend-source/ .
 
+# Устанавливаем pnpm
+RUN npm install -g pnpm
+
 # Устанавливаем зависимости
 RUN pnpm install
 
