@@ -6,7 +6,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-echo -e "${GREEN}🚀 Начинаем развертывание DoodleJump...${NC}"
+echo -e "${GREEN}🚀 Начинаем развертывание Clothing...${NC}"
 
 # Проверяем наличие Docker
 if ! command -v docker &> /dev/null; then
@@ -39,6 +39,11 @@ docker-compose up --build -d
 echo -e "${YELLOW}⏳ Ждем запуска сервисов...${NC}"
 sleep 15
 
+# Настраиваем MinIO
+echo -e "${YELLOW}🪣 Настраиваем MinIO...${NC}"
+chmod +x setup-minio.sh
+./setup-minio.sh
+
 # Показываем статус
 echo -e "${GREEN}📊 Статус контейнеров:${NC}"
 docker-compose ps
@@ -46,3 +51,4 @@ docker-compose ps
 echo -e "${GREEN}✅ Развертывание завершено!${NC}"
 echo -e "${GREEN}🌐 Фронтенд: https://ghettoco.com${NC}"
 echo -e "${GREEN}🔧 API: https://ghettoco.com/api${NC}"
+echo -e "${GREEN}🪣 MinIO Console: https://ghettoco.com/minio-console${NC}"

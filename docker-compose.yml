@@ -16,6 +16,22 @@ services:
       - clothing_network
     restart: unless-stopped
 
+  minio:
+    image: minio/minio:latest
+    container_name: clothing_minio
+    environment:
+      MINIO_ROOT_USER: clouser
+      MINIO_ROOT_PASSWORD: Bobr_Dobriy123
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    networks:
+      - clothing_network
+    restart: unless-stopped
+
   backend:
     build:
       context: .
@@ -33,10 +49,16 @@ services:
       - BOT_TOKEN=${BOT_TOKEN}
       - WEBHOOK_SECRET_TOKEN=${WEBHOOK_SECRET_TOKEN}
       - WEBHOOK_URL=${WEBHOOK_URL}
+      - MINIO_ENDPOINT=minio
+      - MINIO_PORT=9000
+      - MINIO_ACCESS_KEY=clouser
+      - MINIO_SECRET_KEY=Bobr_Dobriy123
+      - MINIO_BUCKET=clothing-files
     ports:
       - "5000:5000"
     depends_on:
       - postgres
+      - minio
     networks:
       - clothing_network
     restart: unless-stopped
@@ -85,6 +107,7 @@ services:
 
 volumes:
   postgres_data:
+  minio_data:
 
 networks:
   clothing_network:
